@@ -1,0 +1,19 @@
+div.mw-wb-forms-add-statement {
+  float: left;
+  margin: 0.7em 0.1em 0 0;
+}
+
+.mw-wb-forms-add-statement .oo-ui-buttonElement-button {
+  padding: 0.2em !important;
+}
+
+div.mw-wb-forms-add-section {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.mw-wb-forms-add-section .oo-ui-buttonElement-button {
+  padding: 0.4em !important;
+}
+

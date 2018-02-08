@@ -1,0 +1,43 @@
+{
+  "name": "wikibase-forms",
+  "author": "Adrian Heine",
+  "license-name": "AGPL-3.0",
+  "config": {
+    "WikibaseFormsNamespace": {
+      "value": "",
+      "description": "The namespace which contains the form definitions"
+    }
+  },
+  "ConfigRegistry": {
+    "wikibase-forms": "GlobalVarConfig::newInstance"
+  },
+  "SpecialPages": {
+    "NewFromForm": "\\MwWikibaseForms\\SpecialNewFromForm::fromGlobalScope"
+  },
+  "manifest_version": 1,
+  "ResourceModules": {
+    "ext.wb-forms.style": { "styles": [ "resources/style.css" ] },
+    "ext.wb-forms.init": {
+      "scripts": [ "resources/init.js" ],
+      "dependencies": [
+        "jquery.valueview",
+        "mediawiki.api.options",
+        "mediawiki.user",
+        "mw.config.values.wbRepo",
+        "mw.config.values.wbGeoShapeStorageApiEndpoint",
+        "wikibase.api.getLocationAgnosticMwApi",
+        "wikibase.dataTypeStore",
+        "wikibase.experts.getStore",
+        "wikibase.formatters.ApiValueFormatterFactory",
+        "wikibase.parsers.getStore",
+        "wikibase.api.RepoApi",
+        "wikibase.ValueViewBuilder",
+        "wikibase.WikibaseContentLanguages"
+      ] }
+  },
+  "ResourceFileModulePaths": {
+    "localBasePath": "",
+    "remoteExtPath": "wikibase-forms"
+  },
+  "MessagesDirs": [ "messages" ]
+}

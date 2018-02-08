@@ -1,0 +1,54 @@
+<?php
+/**
+ * Wikibase forms extension
+ * Copyright (C) 2018 Adrian Heine <mail@adrianheine.de>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+declare( strict_types=1 );
+
+namespace MwWikibaseForms;
+
+use ContentHandler;
+use MediaWiki\MediaWikiServices;
+use Revision;
+use Title;
+use Wikibase\DataModel\Entity\EntityIdParser;
+use WikibaseForms\FormParser;
+use WikibaseForms\Model\Form;
+use WikiPage;
+
+class MediaWikiFormProvider implements FormProvider {
+
+	public function __construct( EntityIdParser $entityIdParser ) {
+		$this->entityIdParser = $entityIdParser;
+	}
+
+	public function getForm( string $name ): Form {
+		$config = MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'wikibase-forms' );
+		$ns = $config->get( 'WikibaseFormsNamespace' );
+		$title = Title::makeTitleSafe( $ns, $name );
+		if ( !$title || !$title->exists() ) {
+			throw new Exception( "Form not found" );
+		}
+		$wikiPage = WikiPage::factory( $title );
+		$revision = $wikiPage->getRevision();
+		$content = $revision->getContent( Revision::RAW );
+		$text = ContentHandler::getContentText( $content );
+		$formParser = new FormParser( $this->entityIdParser );
+		$form = $formParser->parse( $text );
+		return $form;
+	}
+
+}
