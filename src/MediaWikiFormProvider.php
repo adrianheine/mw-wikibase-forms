@@ -22,7 +22,8 @@ namespace MwWikibaseForms;
 
 use ContentHandler;
 use MediaWiki\MediaWikiServices;
-use Revision;
+use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Revision\SlotRecord;
 use Title;
 use Wikibase\DataModel\Entity\EntityIdParser;
 use WikibaseForms\FormParser;
@@ -43,8 +44,8 @@ class MediaWikiFormProvider implements FormProvider {
 			throw new Exception( "Form not found" );
 		}
 		$wikiPage = WikiPage::factory( $title );
-		$revision = $wikiPage->getRevision();
-		$content = $revision->getContent( Revision::RAW );
+		$revision = $wikiPage->getRevisionRecord();
+		$content = $revision->getContent( SlotRecord::MAIN, RevisionRecord::RAW );
 		$text = ContentHandler::getContentText( $content );
 		$formParser = new FormParser( $this->entityIdParser );
 		$form = $formParser->parse( $text );
